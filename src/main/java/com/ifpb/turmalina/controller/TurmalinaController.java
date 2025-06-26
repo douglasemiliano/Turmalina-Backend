@@ -5,6 +5,7 @@ import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Student;
 import com.ifpb.turmalina.DTO.AlunoRankingDto;
 import com.ifpb.turmalina.Entity.PerfilAluno;
+import com.ifpb.turmalina.Entity.Ranking;
 import com.ifpb.turmalina.service.AuthService;
 import com.ifpb.turmalina.service.GamificationClass;
 import com.ifpb.turmalina.service.GoogleClassroomService;
@@ -70,7 +71,13 @@ public class TurmalinaController {
     @GetMapping("/ranking/{courseId}")
     public ResponseEntity<List<AlunoRankingDto>> getRanking(@PathVariable String courseId, @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
         List<Student> alunos = googleClassroomService.listStudents(courseId, accessToken);
-        List<AlunoRankingDto> ranking = this.gamificationClass.obterRankingAlunos(courseId, accessToken);
+        List<AlunoRankingDto> ranking = this.gamificationClass.atualizarRankingAlunos(courseId, accessToken);
+        return ResponseEntity.ok(ranking);
+    }
+
+    @GetMapping("/v2/ranking/{courseId}")
+    public ResponseEntity<Ranking> getRankingv2(@PathVariable String courseId, @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
+        Ranking ranking = this.gamificationClass.obterRankingCurso(courseId, accessToken);
         return ResponseEntity.ok(ranking);
     }
 

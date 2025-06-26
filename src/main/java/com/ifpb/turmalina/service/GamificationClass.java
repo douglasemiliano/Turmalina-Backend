@@ -1,8 +1,8 @@
 package com.ifpb.turmalina.service;
 
-import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.*;
 import com.ifpb.turmalina.DTO.AlunoRankingDto;
+import com.ifpb.turmalina.Entity.Ranking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +18,9 @@ public class GamificationClass {
 
     @Autowired
     private PerfilAlunoService perfilAlunoService;
+
+    @Autowired
+    private RankingService rankingService;
 
     public int calcularPontuacao(List<CourseWork> atividadesConcluidas) {
         // Exemplo: 10 pontos por atividade concluída
@@ -89,7 +92,7 @@ public class GamificationClass {
 //
 //    }
 
-    public List<AlunoRankingDto> obterRankingAlunos(String courseId, String accessToken) throws IOException, GeneralSecurityException {
+    public List<AlunoRankingDto> atualizarRankingAlunos(String courseId, String accessToken) throws IOException, GeneralSecurityException {
         Map<String, Double> pontuacoesAlunos = new HashMap<>();
 
         // Passo 1: Mapear alunos (id → nome)
@@ -113,14 +116,36 @@ public class GamificationClass {
         }
 
         // Passo 3: Montar ranking
-        List<AlunoRankingDto> ranking = new ArrayList<>();
+        Ranking ranking = rankingService.buscarRankingPorCursoId(courseId);
+        List<AlunoRankingDto> alunoRankingList = new ArrayList<>();
         for (Map.Entry<String, Double> entry : pontuacoesAlunos.entrySet()) {
             String alunoId = entry.getKey();
             String nome = mapaIdParaNome.getOrDefault(alunoId, "Aluno desconhecido");
-            ranking.add(new AlunoRankingDto(alunoId, nome, entry.getValue(), 0));
+            alunoRankingList.add(new AlunoRankingDto(alunoId, nome, entry.getValue(), 0));
+            System.err.println("Aluno: " + nome + ", Pontuação: " + entry.getValue());
+            System.err.println("ranking: " + ranking.toString());
+            if (ranking.getAlunos() == null || ranking.getAlunos().isEmpty()) {
+                ranking.setAlunos(new ArrayList<>());
+            }
+            atualizarArrayAlunos(ranking.getAlunos(), new AlunoRankingDto(alunoId, nome, entry.getValue(), 0));
         }
+        rankingService.salvarRanking(ranking);
+        alunoRankingList.sort(Comparator.comparingDouble(AlunoRankingDto::getPontuacaoTotal).reversed());
+        return alunoRankingList;
+    }
 
-        ranking.sort(Comparator.comparingDouble(AlunoRankingDto::getPontuacaoTotal).reversed());
-        return ranking;
+    public List<AlunoRankingDto> atualizarArrayAlunos(List<AlunoRankingDto> alunos, AlunoRankingDto aluno) {
+        for (AlunoRankingDto a : alunos) {
+            if (aluno.getAlunoId().equals(a.getAlunoId())) {
+                a.setPontuacaoTotal(aluno.getPontuacaoTotal());
+                return alunos;
+            }
+        }
+        alunos.add(aluno);
+        return alunos;
+    }
+
+    public Ranking obterRankingCurso(String courseId, String accessToken) {
+        return rankingService.buscarRankingPorCursoId(courseId);
     }
 }
