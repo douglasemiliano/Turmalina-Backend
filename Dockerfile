@@ -1,21 +1,18 @@
-# Etapa 1: Build da aplicação
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
+# Use uma imagem base do Maven com JDK 18 para compilar o projeto
+FROM maven:3.8.7-openjdk-18 as build
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+ADD . /usr/src/app
+RUN mvn package
 
-# Etapa 2: Imagem final
-FROM eclipse-temurin:21-jre
-WORKDIR /app
-
-# 🔥 Instala certificados CA (necessário para conexões TLS como MongoDB Atlas)
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
-
+# Use uma imagem base do OpenJDK 17 para executar a aplicação
+FROM eclipse-temurin:17-jdk
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 COPY --from=build /app/target/*.jar app.jar
 
-# Porta exposta
+# Exponha a porta que a aplicação usará
 EXPOSE 8080
 
-# Comando para rodar a aplicação
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando para executar a aplicação
+CMD ["java", "-jar", "app.jar"]
