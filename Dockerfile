@@ -8,6 +8,10 @@ RUN mvn clean package -DskipTests
 # Etapa 2: Imagem final
 FROM eclipse-temurin:21-jre
 WORKDIR /app
+
+# 🔥 Instala certificados CA (necessário para conexões TLS como MongoDB Atlas)
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/target/*.jar app.jar
 
 # Porta exposta
