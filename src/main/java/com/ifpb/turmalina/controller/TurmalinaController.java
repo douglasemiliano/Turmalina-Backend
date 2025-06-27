@@ -20,7 +20,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/turmalina")
-@CrossOrigin(origins = "http://localhost:4200, https://turma-lina-app.vercel.app/, turma-lina-app.vercel.app ")
+@CrossOrigin(origins = {
+        "http://localhost:4200",
+        "https://turma-lina-app.vercel.app"
+})
+
 public class TurmalinaController {
 
     @Autowired

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document(collection = "perfila_aluno")
+@Document(collection = "perfil_aluno")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
