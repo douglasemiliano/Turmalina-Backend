@@ -43,7 +43,7 @@ public class BadgeService {
     }
 
     public String addBadgeToUser(String idBadge, String idUser) {
-        PerfilAluno aluno = this.perfilAlunoService.buscarPerfilAlunoPorId(idUser);
+        PerfilAluno aluno = this.perfilAlunoService.getPerfilAluno(idUser);
         Badge badge = this.buscarBadgePorId(idBadge);
         if (aluno.getBadges().stream().anyMatch(b -> b.getId().equals(idBadge))) {
             return "Badge já atribuída ao usuário.";

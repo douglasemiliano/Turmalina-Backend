@@ -10,13 +10,13 @@ import lombok.Setter;
 public class PerfilRequestDTO {
     private String alunoId;
     private String nome;
-    private String fotoPerfil;
+    private String foto;
     private String email;
 
-    public PerfilRequestDTO(String alunoId, String nome, String fotoPerfil, String email) {
+    public PerfilRequestDTO(String alunoId, String nome, String foto, String email) {
         this.alunoId = alunoId;
         this.nome = nome;
-        this.fotoPerfil = fotoPerfil;
+        this.foto = foto;
         this.email = email;
     }
 
@@ -37,11 +37,11 @@ public class PerfilRequestDTO {
     }
 
     public String getFotoPerfil() {
-        return fotoPerfil;
+        return foto;
     }
 
     public void setFotoPerfil(String fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
+        this.foto = fotoPerfil;
     }
     public String getEmail() {
         return email;

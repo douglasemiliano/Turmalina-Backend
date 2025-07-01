@@ -36,13 +36,6 @@ public class PerfilAlunoService {
         return perfilExistente.get();
     }
 
-    public PerfilAluno buscarPerfilAlunoPorId(String alunoId) {
-        return repositoriio.stream()
-                .filter(perfil -> perfil.getAlunoId().equals(alunoId))
-                .findFirst()
-                .orElse(new PerfilAluno(alunoId));
-    }
-
     public PerfilAluno getPerfilAluno(String alunoId) {
         return repositorio.findById(alunoId)
                 .orElseThrow(() -> new RuntimeException("Perfil do aluno não encontrado"));
