@@ -99,4 +99,12 @@ public class TurmalinaController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/atualizar/{userId}")
+    public ResponseEntity<String> atualizarRankingUsuario(
+            @PathVariable String userId,
+            @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
+        String response = this.gamificationClass.atualizarRanking(userId, accessToken);
+        return ResponseEntity.ok("Ranking do usuário atualizado em todos os cursos.");
+    }
 }

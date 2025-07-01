@@ -51,10 +51,6 @@ public class GamificationClass {
         return ranking.toString();
     }
 
-//    private double obterPontuacao(StudentSubmission submissao) {
-//        Double grade = submissao.getAssignedGrade() != null ? submissao.getAssignedGrade() : submissao.getDraftGrade();
-//        return grade != null ? grade : 0.0;
-//    }
 
     private double obterPontuacao(StudentSubmission submissao) {
         String estado = submissao.getState();
@@ -69,35 +65,15 @@ public class GamificationClass {
     }
 
 
-//    public List<AlunoRankingDto> obterRankingAlunos(String courseId, String accessToken) throws IOException, GeneralSecurityException {
-//        Map<String, Double> pontuacoesAlunos = new HashMap<>();
-//        List<CourseWork> atividades = classroomService.listarAtividades(courseId, accessToken);
-//        for (CourseWork atividade : atividades) {
-//            List<StudentSubmission> response = classroomService.listStudentSubmissions(courseId, atividade.getId(), accessToken);
-//
-//            for (StudentSubmission submissao : response) {
-//                String alunoId = submissao.getId();
-//                double pontuacao = obterPontuacao(submissao);
-//                pontuacoesAlunos.merge(alunoId, pontuacao, Double::sum);
-//            }
-//        }
-//        List<AlunoRankingDto> ranking = new ArrayList<>();
-//        for (Map.Entry<String, Double> entry : pontuacoesAlunos.entrySet()) {
-//            String alunoId = entry.getKey();
-//            UserProfile perfilAluno = classroomService.getUserProfile(alunoId, accessToken);
-//            ranking.add(new AlunoRankingDto(alunoId, perfilAluno.getName().getFullName(), entry.getValue(), 0));
-//        }
-//        ranking.sort(Comparator.comparingDouble(AlunoRankingDto::getPontuacaoTotal).reversed());
-//        return ranking;
-//
-//    }
-
     public List<AlunoRankingDto> atualizarRankingAlunos(String courseId, String accessToken) throws IOException, GeneralSecurityException {
         Map<String, Double> pontuacoesAlunos = new HashMap<>();
 
         // Passo 1: Mapear alunos (id → nome)
         List<Student> alunos = classroomService.listStudents(courseId, accessToken); // novo método necessário
         Map<String, String> mapaIdParaNome = new HashMap<>();
+        if(alunos == null || alunos.isEmpty()) {
+            return null;
+        }
         for (Student aluno : alunos) {
             mapaIdParaNome.put(aluno.getUserId(), aluno.getProfile().getName().getFullName());
         }
@@ -147,5 +123,19 @@ public class GamificationClass {
 
     public Ranking obterRankingCurso(String courseId, String accessToken) {
         return rankingService.buscarRankingPorCursoId(courseId);
+
     }
+
+    public String atualizarRanking(String userId, String accessToken) throws GeneralSecurityException, IOException {
+        List<Course> cursos =  classroomService.listarCursosOwnerIdDiferentThanMe(userId, accessToken);
+        if(cursos == null || cursos.isEmpty()) {
+            return "Nenhum curso encontrado para o usuário: " + userId;
+        }
+        for(Course curso: cursos) {
+            atualizarRankingAlunos(curso.getId(), accessToken);
+        }
+        return "Ranking atualizado com sucesso para o usuário: " + userId + " nos cursos: " + cursos.size();
+    }
+
+
 }
