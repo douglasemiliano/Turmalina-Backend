@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "perfil_aluno")
@@ -19,15 +20,17 @@ public class PerfilAluno {
     private String nome;
     private double pontuacaoGlobal;
     private int nivel; // 1 a 100
-    private List<String> badges;
+    private List<Badge> badges;
     private LocalDateTime ultimaAtualizacao;
+    private String foto;
+    private String email;
 
     public PerfilAluno(String alunoId) {
         this.alunoId = alunoId;
         this.nome = "";
         this.pontuacaoGlobal = 0.0;
         this.nivel = 1; // Nível inicial
-        this.badges = List.of(); // Lista vazia de badges
+        this.badges = new ArrayList<Badge>();// Lista vazia de badges
         this.ultimaAtualizacao = LocalDateTime.now(); // Data e hora atual
     }
 
@@ -63,11 +66,11 @@ public class PerfilAluno {
         this.nivel = nivel;
     }
 
-    public List<String> getBadges() {
+    public List<Badge> getBadges() {
         return badges;
     }
 
-    public void setBadges(List<String> badges) {
+    public void setBadges(List<Badge> badges) {
         this.badges = badges;
     }
 
@@ -77,5 +80,20 @@ public class PerfilAluno {
 
     public void setUltimaAtualizacao(LocalDateTime ultimaAtualizacao) {
         this.ultimaAtualizacao = ultimaAtualizacao;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

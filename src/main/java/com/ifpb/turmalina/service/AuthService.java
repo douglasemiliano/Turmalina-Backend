@@ -65,7 +65,6 @@ public class AuthService {
         ).setAccessType("offline")
                 .build();
 
-        System.err.println("entrou" +authorizationCode);
 
         // Trocando o código de autorização pelo token
         TokenResponse tokenResponse = flow.newTokenRequest(authorizationCode)

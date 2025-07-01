@@ -4,8 +4,10 @@ package com.ifpb.turmalina.controller;
 import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Student;
 import com.ifpb.turmalina.DTO.AlunoRankingDto;
+import com.ifpb.turmalina.DTO.PerfilRequestDTO;
 import com.ifpb.turmalina.Entity.PerfilAluno;
 import com.ifpb.turmalina.Entity.Ranking;
+import com.ifpb.turmalina.Parsers.PerfilRequestDTOToPerfilAlunoParser;
 import com.ifpb.turmalina.service.AuthService;
 import com.ifpb.turmalina.service.GamificationClass;
 import com.ifpb.turmalina.service.GoogleClassroomService;
@@ -39,31 +41,35 @@ public class TurmalinaController {
         return ResponseEntity.ok("Turmalina is running!");
     }
 
+
+    @PostMapping("/login")
+    public ResponseEntity<PerfilAluno> registrarUsuario(@RequestHeader String accessToken, @RequestBody PerfilRequestDTO perfil) throws IOException, GeneralSecurityException {
+        PerfilAluno perfilAluno = PerfilRequestDTOToPerfilAlunoParser.parse(perfil);
+        PerfilAluno response = perfilAlunoService.criarPerfilAluno(perfilAluno);
+        this.gamificationClass.atualizarRanking(response.getAlunoId(), accessToken);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/cursos")
     public ResponseEntity<?> listCourses(@RequestHeader String accessToken) throws GeneralSecurityException, IOException {
-        System.err.println(accessToken);
         return ResponseEntity.ok(this.googleClassroomService.listCourses(accessToken));
     }
 
     /* lista os cursos do usuário que não são de sua propriedade */
     @GetMapping("/cursos/{userId}")
     public ResponseEntity<?> listarCursosFacoParte(@RequestHeader String accessToken, @PathVariable String userId) throws GeneralSecurityException, IOException {
-        System.err.println(accessToken);
         return ResponseEntity.ok(this.googleClassroomService.listarCursosOwnerIdDiferentThanMe(userId, accessToken));
     }
 
     @GetMapping("/atividades/{courseId}")
     public ResponseEntity<List<CourseWork>> listarAtividades(@PathVariable String courseId, @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
-        System.err.println("coursework");
         List<CourseWork> courseWorks = googleClassroomService.listarAtividades(courseId, accessToken);
         return ResponseEntity.ok(courseWorks);
     }
 
     @GetMapping("/alunos/{courseId}")
     public ResponseEntity<List<Student>> listStudentSubmissions(@PathVariable String courseId, @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
-        System.err.println("entrou");
         List<Student> submissions = googleClassroomService.listStudents(courseId, accessToken);
-
         return ResponseEntity.ok(submissions);
     }
 
@@ -107,4 +113,5 @@ public class TurmalinaController {
         String response = this.gamificationClass.atualizarRanking(userId, accessToken);
         return ResponseEntity.ok("Ranking do usuário atualizado em todos os cursos.");
     }
+
 }

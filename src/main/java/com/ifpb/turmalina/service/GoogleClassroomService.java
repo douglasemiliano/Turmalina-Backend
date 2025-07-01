@@ -54,12 +54,6 @@ public class GoogleClassroomService {
         List<Course> cursosFiltrados = new ArrayList<>();
 
         for (Course curso : cursos.getCourses()) {
-
-            System.err.println("Curso OwnerId: " + curso.getOwnerId() + " - UserId: " + userId);
-            if(curso.getOwnerId().equals(userId)) {
-                System.err.println(curso.getOwnerId());
-            }
-
             if (curso.getOwnerId() != null && !curso.getOwnerId().equals(userId)) {
                 cursosFiltrados.add(curso);
             }
@@ -116,8 +110,6 @@ public class GoogleClassroomService {
             Classroom service = initializeClassroomClient(accessToken);
             ListStudentsResponse response = service.courses().students().list(courseId).execute();
             List<Student> alunos = service.courses().students().list(courseId).execute().getStudents();
-            System.err.println("alinoooos - - -  " + alunos);
-            System.err.println(response);
             return response.getStudents();
         } catch (Exception e) {
             throw new IOException("Erro ao listar alunos: " + e.getMessage(), e);
@@ -158,10 +150,8 @@ public class GoogleClassroomService {
                     submissions.stream()
                             .filter(studentSubmission -> studentSubmission.getUserId().equals(userId))
                             .forEach(submission -> {
-                                System.err.println(submission.getUserId());
                                 courseWork.setState(submission.getState());
                                 response.add(courseWork);
-                                System.err.println(submission.getState());
                             });
                 } else {
                     response.add(courseWork);

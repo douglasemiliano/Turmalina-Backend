@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PerfilAlunoService {
@@ -19,27 +16,24 @@ public class PerfilAlunoService {
 
     List<PerfilAluno> repositoriio = new ArrayList<>();
 
-    public PerfilAluno atualizarPerfilAluno(String alunoId, String nomeAluno, double novaPontuacao, List<String> novasBadges){
-        PerfilAluno perfil = this.repositorio.findById(alunoId).orElse(new PerfilAluno(alunoId));
+    public void atualizarPerfilAluno(PerfilAluno perfilAluno) {
+        perfilAluno.setUltimaAtualizacao(LocalDateTime.now());
+        boolean existe = this.repositorio.existsById(perfilAluno.getAlunoId());
 
+        if (existe) {
+            repositorio.save(perfilAluno);
+        } else {
+            throw new RuntimeException("Perfil do aluno não encontrado");
+        }
 
-        perfil.setNome(nomeAluno);
-
-        perfil.setPontuacaoGlobal(perfil.getPontuacaoGlobal() + novaPontuacao);
-        perfil.setNivel(calcularNivel(perfil.getPontuacaoGlobal()));
-
-        Set<String> badges = new HashSet<>(perfil.getBadges());
-        badges.addAll(novasBadges);
-        perfil.setBadges(new ArrayList<>(badges));
-
-        perfil.setUltimaAtualizacao(LocalDateTime.now());
-        repositorio.save(perfil);
-
-        return perfil;
     }
 
     public PerfilAluno criarPerfilAluno(PerfilAluno perfilAluno) {
-        return repositorio.save(perfilAluno);
+        Optional<PerfilAluno> perfilExistente = repositorio.findById(perfilAluno.getAlunoId());
+        if (perfilExistente.isEmpty()) {
+            return repositorio.save(perfilAluno);
+        }
+        return perfilExistente.get();
     }
 
     public PerfilAluno buscarPerfilAlunoPorId(String alunoId) {
@@ -52,6 +46,18 @@ public class PerfilAlunoService {
     public PerfilAluno getPerfilAluno(String alunoId) {
         return repositorio.findById(alunoId)
                 .orElseThrow(() -> new RuntimeException("Perfil do aluno não encontrado"));
+    }
+
+    public void atualizarPontuacaoGlobal(String alunoId, double pontuacao) {
+        Optional<PerfilAluno> perfil = this.repositorio.findById(alunoId);
+
+        if(perfil.isPresent()) {
+            perfil.get().setPontuacaoGlobal(perfil.get().getPontuacaoGlobal() + pontuacao);
+            perfil.get().setNivel(calcularNivel(perfil.get().getPontuacaoGlobal()));
+            perfil.get().setUltimaAtualizacao(LocalDateTime.now());
+            repositorio.save(perfil.get());
+        }
+
     }
 
     private int calcularNivel(double pontuacao) {
