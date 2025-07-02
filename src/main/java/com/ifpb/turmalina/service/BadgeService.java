@@ -68,15 +68,16 @@ public class BadgeService {
         return code;
     }
 
-    public String resgatarBadgeComCodigo(String code, String userId) {
+    public Badge resgatarBadgeComCodigo(String code, String userId) {
         CodigoResgate redeemCode = codigoResgateRepository.findById(code)
                 .orElseThrow(() -> new RuntimeException("Código inválido."));
         if (redeemCode.getDataExpiracao().isBefore(LocalDateTime.now())) {
             codigoResgateRepository.deleteById(code);
             throw new RuntimeException("Código expirado.");
         }
-        String resultado = addBadgeToUser(redeemCode.getBadgeId(), userId);
-//        codigoResgateRepository.deleteById(code); // Código só pode ser usado uma vez
-        return resultado;
+        addBadgeToUser(redeemCode.getBadgeId(), userId);
+
+        //codigoResgateRepository.deleteById(code); // Código só pode ser usado uma vez
+        return buscarBadgePorId(redeemCode.getBadgeId());
     }
 }

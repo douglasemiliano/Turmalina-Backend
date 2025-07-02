@@ -46,8 +46,8 @@ public class BadgeController {
     }
 
     @PostMapping("/resgatar")
-    public ResponseEntity<String> resgatarBadge(@RequestParam String code, @RequestParam String userId) {
-        String resultado = service.resgatarBadgeComCodigo(code, userId);
+    public ResponseEntity<Badge> resgatarBadge(@RequestParam String code, @RequestParam String userId) {
+        Badge resultado = service.resgatarBadgeComCodigo(code, userId);
         return ResponseEntity.ok(resultado);
     }
 
