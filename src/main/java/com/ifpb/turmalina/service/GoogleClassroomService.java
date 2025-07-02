@@ -53,6 +53,10 @@ public class GoogleClassroomService {
 
         List<Course> cursosFiltrados = new ArrayList<>();
 
+        if(cursos.isEmpty()){
+            return cursosFiltrados;
+        }
+
         for (Course curso : cursos.getCourses()) {
             if (curso.getOwnerId() != null && !curso.getOwnerId().equals(userId)) {
                 cursosFiltrados.add(curso);
