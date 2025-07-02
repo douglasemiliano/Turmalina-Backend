@@ -1,10 +1,9 @@
 package com.ifpb.turmalina.Repository;
 
-import com.ifpb.turmalina.Entity.Ranking;
+import com.ifpb.turmalina.Entity.CodigoResgate;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RankingRepository extends MongoRepository<Ranking, String> {
-    Ranking findByCursoId(String cursoId);
+public interface CodigoResgateRepository extends MongoRepository<CodigoResgate, String> {
 }

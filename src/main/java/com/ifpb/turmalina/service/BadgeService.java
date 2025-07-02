@@ -1,12 +1,16 @@
 package com.ifpb.turmalina.service;
 
 import com.ifpb.turmalina.Entity.Badge;
+import com.ifpb.turmalina.Entity.CodigoResgate;
 import com.ifpb.turmalina.Entity.PerfilAluno;
 import com.ifpb.turmalina.Repository.BadgeRepository;
+import com.ifpb.turmalina.Repository.CodigoResgateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BadgeService {
@@ -14,6 +18,9 @@ public class BadgeService {
 
     @Autowired
     private BadgeRepository badgeRepository;
+
+    @Autowired
+    private CodigoResgateRepository codigoResgateRepository;
 
     @Autowired
     private PerfilAlunoService perfilAlunoService;
@@ -51,5 +58,25 @@ public class BadgeService {
         aluno.getBadges().add(badge);
         this.perfilAlunoService.atualizarPerfilAluno(aluno);
         return "Badge atribuída com sucesso ao usuário.";
+    }
+
+    public String gerarCodigoResgate(String badgeId) {
+        String code = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        LocalDateTime expiraEm = LocalDateTime.now().plusHours(24);
+        CodigoResgate redeemCode = new CodigoResgate(code, badgeId, expiraEm);
+        codigoResgateRepository.save(redeemCode);
+        return code;
+    }
+
+    public String resgatarBadgeComCodigo(String code, String userId) {
+        CodigoResgate redeemCode = codigoResgateRepository.findById(code)
+                .orElseThrow(() -> new RuntimeException("Código inválido."));
+        if (redeemCode.getDataExpiracao().isBefore(LocalDateTime.now())) {
+            codigoResgateRepository.deleteById(code);
+            throw new RuntimeException("Código expirado.");
+        }
+        String resultado = addBadgeToUser(redeemCode.getBadgeId(), userId);
+//        codigoResgateRepository.deleteById(code); // Código só pode ser usado uma vez
+        return resultado;
     }
 }

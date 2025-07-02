@@ -39,4 +39,16 @@ public class BadgeController {
         return ResponseEntity.ok(this.service.addBadgeToUser(idBadge, idUser));
     }
 
+    @PostMapping("/{idBadge}/gerar-codigo")
+    public ResponseEntity<String> gerarCodigo(@PathVariable String idBadge) {
+        String code = service.gerarCodigoResgate(idBadge);
+        return ResponseEntity.ok(code);
+    }
+
+    @PostMapping("/resgatar")
+    public ResponseEntity<String> resgatarBadge(@RequestParam String code, @RequestParam String userId) {
+        String resultado = service.resgatarBadgeComCodigo(code, userId);
+        return ResponseEntity.ok(resultado);
+    }
+
 }
