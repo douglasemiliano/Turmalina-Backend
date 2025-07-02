@@ -61,7 +61,7 @@ public class BadgeService {
     }
 
     public String gerarCodigoResgate(String badgeId) {
-        String code = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String code = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
         LocalDateTime expiraEm = LocalDateTime.now().plusHours(24);
         CodigoResgate redeemCode = new CodigoResgate(code, badgeId, expiraEm);
         codigoResgateRepository.save(redeemCode);
