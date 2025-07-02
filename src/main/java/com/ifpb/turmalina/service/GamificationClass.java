@@ -71,6 +71,11 @@ public class GamificationClass {
 
         // Passo 2: Calcular pontuação por aluno
         List<CourseWork> atividades = classroomService.listarAtividades(courseId, accessToken);
+        if (atividades == null || atividades.isEmpty()) {
+            // Nenhuma atividade encontrada, pode retornar lista vazia ou continuar conforme sua lógica
+            return Collections.emptyList();
+        }
+
         for (CourseWork atividade : atividades) {
             List<StudentSubmission> response = classroomService.listStudentSubmissions(courseId, atividade.getId(), accessToken);
 

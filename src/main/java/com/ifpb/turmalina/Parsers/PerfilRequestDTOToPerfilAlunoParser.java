@@ -6,7 +6,6 @@ import com.ifpb.turmalina.Entity.PerfilAluno;
 public class PerfilRequestDTOToPerfilAlunoParser {
 
     public static PerfilAluno parse(PerfilRequestDTO perfilRequestDTO) {
-        System.err.println(perfilRequestDTO.getNomeAluno());
         PerfilAluno perfil = new PerfilAluno(perfilRequestDTO.getAlunoId());
         perfil.setNome(perfilRequestDTO.getNomeAluno());
         perfil.setFoto(perfilRequestDTO.getFotoPerfil());
