@@ -46,7 +46,6 @@ public class PerfilAlunoService {
 
         if(perfil.isPresent()) {
             perfil.get().setPontuacaoGlobal(perfil.get().getPontuacaoGlobal() + pontuacao);
-            perfil.get().setNivel(calcularNivel(perfil.get().getPontuacaoGlobal()));
             perfil.get().setUltimaAtualizacao(LocalDateTime.now());
             repositorio.save(perfil.get());
         }
