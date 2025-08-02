@@ -1,6 +1,13 @@
 package com.ifpb.turmalina.Entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+import java.time.LocalDateTime;
+
 @Document(collection = "Desafios")
+@Getter
+@Setter
 public class Desafio {
     private String id;
     private String titulo;
@@ -9,11 +16,13 @@ public class Desafio {
     private String cursoId;
     private boolean ativo;
     private Badge badge;
+    private String createdBy;
+    private LocalDateTime dataFinal;
 
     public Desafio() {
     }
 
-    public Desafio(String id, String titulo, String descricao, int pontos, String cursoId, boolean ativo, Badge badge) {
+    public Desafio(String id, String titulo, String descricao, int pontos, String cursoId, boolean ativo, Badge badge, String createdBy, LocalDateTime dataFinal) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -21,6 +30,8 @@ public class Desafio {
         this.cursoId = cursoId;
         this.ativo = ativo;
         this.badge = badge;
+        this.createdBy = createdBy;
+        this.dataFinal = dataFinal;
     }
 
     public String getId() {
@@ -69,5 +80,29 @@ public class Desafio {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public Badge getBadge() {
+        return badge;
+    }
+
+    public void setBadge(Badge badge) {
+        this.badge = badge;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(LocalDateTime dataFinal) {
+        this.dataFinal = dataFinal;
     }
 }
