@@ -12,12 +12,14 @@ public class AlunoRankingDto {
     private String nomeAluno;
     private int pontuacaoTotal;
     private int nivel;
+    private String foto;
 
-    public AlunoRankingDto(String alunoId, String nomeAluno, int pontuacaoTotal, int nivel) {
+    public AlunoRankingDto(String alunoId, String nomeAluno, int pontuacaoTotal, int nivel, String foto) {
         this.alunoId = alunoId;
         this.nomeAluno = nomeAluno;
         this.pontuacaoTotal = pontuacaoTotal;
         this.nivel = nivel;
+        this.foto = foto;
     }
 
     public String getAlunoId() {
@@ -50,5 +52,13 @@ public class AlunoRankingDto {
 
     public void setNivel(int nivel) {
         this.nivel = nivel;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }

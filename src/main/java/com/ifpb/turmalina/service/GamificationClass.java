@@ -54,7 +54,7 @@ public class GamificationClass {
     }
 
     public void ajustarRanking(PerfilAluno perfilAluno, Course curso, int pontuacao){
-        AlunoRankingDto alunoRankingDto = new AlunoRankingDto(perfilAluno.getAlunoId(), perfilAluno.getNome(), pontuacao, perfilAluno.getNivel());
+        AlunoRankingDto alunoRankingDto = new AlunoRankingDto(perfilAluno.getAlunoId(), perfilAluno.getNome(), pontuacao, perfilAluno.getNivel(), perfilAluno.getFoto());
 
 
         Ranking ranking = rankingService.buscarRankingPorCursoId(curso.getId());

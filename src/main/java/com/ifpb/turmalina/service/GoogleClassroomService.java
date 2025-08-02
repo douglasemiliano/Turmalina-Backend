@@ -198,4 +198,20 @@ public class GoogleClassroomService {
         return response;
     }
 
+    public List<Course> listarMeusCursos(String userId, String accessToken) throws GeneralSecurityException, IOException {
+        List<Course> cursos = listCourses(accessToken);
+        List<Course> cursosFiltrados = new ArrayList<>();
+
+        if(cursos.isEmpty()){
+            return cursosFiltrados;
+        }
+
+        for (Course curso : cursos) {
+            if (curso.getOwnerId() != null && curso.getOwnerId().equals(userId) && curso.getCourseState().equals("ACTIVE")) {
+                cursosFiltrados.add(curso);
+            }
+        }
+
+        return cursosFiltrados;
+    }
 }

@@ -1,6 +1,7 @@
 package com.ifpb.turmalina.controller;
 
 
+import com.google.api.services.classroom.model.Course;
 import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Student;
 import com.ifpb.turmalina.DTO.AlunoRankingDto;
@@ -64,6 +65,11 @@ public class TurmalinaController {
     @GetMapping("/cursos/{userId}")
     public ResponseEntity<?> listarCursosFacoParte(@RequestHeader String accessToken, @PathVariable String userId) throws GeneralSecurityException, IOException {
         return ResponseEntity.ok(this.googleClassroomService.listarCursosOwnerIdDiferentThanMe(userId, accessToken));
+    }
+
+    @GetMapping("/cursos/{userId}/meus-cursos")
+    public ResponseEntity<List<Course>> listarMeusCursos(@RequestHeader String accessToken, @PathVariable String userId) throws GeneralSecurityException, IOException {
+        return ResponseEntity.ok(this.googleClassroomService.listarMeusCursos(userId, accessToken));
     }
 
     @GetMapping("/atividades/{courseId}")
