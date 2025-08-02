@@ -10,14 +10,14 @@ import lombok.Setter;
 public class AlunoRankingDto {
     private String alunoId;
     private String nomeAluno;
-    private double pontuacaoTotal;
-    private double percentual;
+    private int pontuacaoTotal;
+    private int nivel;
 
-    public AlunoRankingDto(String alunoId, String nomeAluno, double pontuacaoTotal, double percentual) {
+    public AlunoRankingDto(String alunoId, String nomeAluno, int pontuacaoTotal, int nivel) {
         this.alunoId = alunoId;
         this.nomeAluno = nomeAluno;
         this.pontuacaoTotal = pontuacaoTotal;
-        this.percentual = percentual;
+        this.nivel = nivel;
     }
 
     public String getAlunoId() {
@@ -36,19 +36,19 @@ public class AlunoRankingDto {
         this.nomeAluno = nomeAluno;
     }
 
-    public double getPontuacaoTotal() {
+    public int getPontuacaoTotal() {
         return pontuacaoTotal;
     }
 
-    public void setPontuacaoTotal(double pontuacaoTotal) {
+    public void setPontuacaoTotal(int pontuacaoTotal) {
         this.pontuacaoTotal = pontuacaoTotal;
     }
 
-    public double getPercentual() {
-        return percentual;
+    public int getNivel() {
+        return nivel;
     }
 
-    public void setPercentual(double percentual) {
-        this.percentual = percentual;
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
     }
 }

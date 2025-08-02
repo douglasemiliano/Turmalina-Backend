@@ -18,7 +18,7 @@ public class PerfilAluno {
     @Id
     private String alunoId;
     private String nome;
-    private double pontuacaoGlobal;
+    private int pontuacaoGlobal;
     private int nivel; // 1 a 100
     private List<Badge> badges;
     private LocalDateTime ultimaAtualizacao;
@@ -28,7 +28,7 @@ public class PerfilAluno {
     public PerfilAluno(String alunoId) {
         this.alunoId = alunoId;
         this.nome = "";
-        this.pontuacaoGlobal = 0.0;
+        this.pontuacaoGlobal = 0;
         this.nivel = 1; // Nível inicial
         this.badges = new ArrayList<Badge>();// Lista vazia de badges
         this.ultimaAtualizacao = LocalDateTime.now(); // Data e hora atual
@@ -50,11 +50,11 @@ public class PerfilAluno {
         this.nome = nome;
     }
 
-    public double getPontuacaoGlobal() {
+    public int getPontuacaoGlobal() {
         return pontuacaoGlobal;
     }
 
-    public void setPontuacaoGlobal(double pontuacaoGlobal) {
+    public void setPontuacaoGlobal(int pontuacaoGlobal) {
         this.pontuacaoGlobal = pontuacaoGlobal;
     }
 
@@ -95,5 +95,18 @@ public class PerfilAluno {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String toString() {
+        return "PerfilAluno{" +
+                "alunoId='" + alunoId + '\'' +
+                ", nome='" + nome + '\'' +
+                ", pontuacaoGlobal=" + pontuacaoGlobal +
+                ", nivel=" + nivel +
+                ", badges=" + badges +
+                ", ultimaAtualizacao=" + ultimaAtualizacao +
+                ", foto='" + foto + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

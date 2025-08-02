@@ -10,9 +10,13 @@ import com.google.api.services.classroom.ClassroomScopes;
 import com.google.api.services.oauth2.Oauth2Scopes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.List;
@@ -79,6 +83,19 @@ public class AuthService {
 
     public Credential getCredentials() {
         return storedCredential; // Retorna as credenciais armazenadas
+    }
+
+    public ResponseEntity<String> validarToken(String accessToken) throws IOException {
+        URL url = new URL("https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=" + accessToken);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+        if(connection.getResponseCode() == 200) {
+            return ResponseEntity.ok("Token válido");
+        } else {
+            // Se o token não for válido, retorna um erro
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token invalido");
+        }
     }
 }
 

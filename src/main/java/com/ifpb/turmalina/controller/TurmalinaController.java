@@ -46,8 +46,13 @@ public class TurmalinaController {
     public ResponseEntity<PerfilAluno> registrarUsuario(@RequestHeader String accessToken, @RequestBody PerfilRequestDTO perfil) throws IOException, GeneralSecurityException {
         PerfilAluno perfilAluno = PerfilRequestDTOToPerfilAlunoParser.parse(perfil);
         PerfilAluno response = perfilAlunoService.criarPerfilAluno(perfilAluno);
-        this.gamificationClass.atualizarRanking(response.getAlunoId(), accessToken);
+        this.gamificationClass.atualizarPontuacaoGlobal(response, accessToken);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/validar-token")
+    public ResponseEntity<String> validarToken(@RequestHeader String accessToken) throws GeneralSecurityException, IOException {
+        return this.authService.validarToken(accessToken);
     }
 
     @GetMapping("/cursos")
@@ -73,16 +78,10 @@ public class TurmalinaController {
         return ResponseEntity.ok(submissions);
     }
 
-    @GetMapping("/ranking/{courseId}")
-    public ResponseEntity<List<AlunoRankingDto>> getRanking(@PathVariable String courseId, @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
-        List<Student> alunos = googleClassroomService.listStudents(courseId, accessToken);
-        List<AlunoRankingDto> ranking = this.gamificationClass.atualizarRankingAlunos(courseId, accessToken);
-        return ResponseEntity.ok(ranking);
-    }
-
     @GetMapping("/v2/ranking/{courseId}")
     public ResponseEntity<Ranking> getRankingv2(@PathVariable String courseId, @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
-        Ranking ranking = this.gamificationClass.obterRankingCurso(courseId, accessToken);
+        googleClassroomService.validarToken(accessToken);
+        Ranking ranking = this.gamificationClass.obterRankingCurso(courseId);
         return ResponseEntity.ok(ranking);
     }
 
@@ -106,12 +105,5 @@ public class TurmalinaController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/atualizar/{userId}")
-    public ResponseEntity<String> atualizarRankingUsuario(
-            @PathVariable String userId,
-            @RequestHeader String accessToken) throws GeneralSecurityException, IOException {
-        String response = this.gamificationClass.atualizarRanking(userId, accessToken);
-        return ResponseEntity.ok("Ranking do usuário atualizado em todos os cursos.");
-    }
 
 }

@@ -3,6 +3,7 @@ package com.ifpb.turmalina.service;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.*;
@@ -13,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -120,11 +122,37 @@ public class GoogleClassroomService {
         }
     }
 
-    public List<StudentSubmission> listStudentSubmissions(String courseId, String assignmentId, String accessToken) throws GeneralSecurityException, IOException {
+    public List<StudentSubmission> listStudentSubmissions2(String courseId, String assignmentId, String accessToken) throws GeneralSecurityException, IOException {
         try {
             Classroom service = initializeClassroomClient(accessToken);
             ListStudentSubmissionsResponse response = service.courses().courseWork().studentSubmissions().list(courseId, assignmentId).execute();
             return response.getStudentSubmissions();
+        } catch (Exception e) {
+            throw new IOException("Erro ao listar submissões de alunos: " + e.getMessage(), e);
+        }
+    }
+
+    public List<StudentSubmission> listStudentSubmissions(String courseId, String assignmentId, String accessToken)
+            throws GeneralSecurityException, IOException {
+        try {
+            Classroom service = initializeClassroomClient(accessToken);
+            ListStudentSubmissionsResponse response = service.courses()
+                    .courseWork()
+                    .studentSubmissions()
+                    .list(courseId, assignmentId)
+                    .execute();
+
+            return response.getStudentSubmissions();
+
+        } catch (GoogleJsonResponseException e) {
+            if (e.getStatusCode() == 404) {
+                // Atividade não existe mais (ou foi deletada, ou id inválido)
+                System.out.println("Atividade não encontrada: " + assignmentId + " no curso: " + courseId);
+                return Collections.emptyList(); // Ou null, se preferir tratar diferente
+            }
+            // Outros erros HTTP
+            throw new IOException("Erro HTTP da API do Google: " + e.getDetails().getMessage(), e);
+
         } catch (Exception e) {
             throw new IOException("Erro ao listar submissões de alunos: " + e.getMessage(), e);
         }

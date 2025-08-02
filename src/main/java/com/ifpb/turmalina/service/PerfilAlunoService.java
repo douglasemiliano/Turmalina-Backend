@@ -41,18 +41,27 @@ public class PerfilAlunoService {
                 .orElseThrow(() -> new RuntimeException("Perfil do aluno não encontrado"));
     }
 
-    public void atualizarPontuacaoGlobal(String alunoId, double pontuacao) {
+    public PerfilAluno atualizarPontuacaoGlobal(String alunoId, int pontuacao) {
         Optional<PerfilAluno> perfil = this.repositorio.findById(alunoId);
 
+        System.err.println("Atualizando pontuação global do aluno: " + alunoId + " com pontuação: " + pontuacao);
         if(perfil.isPresent()) {
-            perfil.get().setPontuacaoGlobal(perfil.get().getPontuacaoGlobal() + pontuacao);
+            if(perfil.get().getPontuacaoGlobal() < pontuacao) {
+                perfil.get().setPontuacaoGlobal(perfil.get().getPontuacaoGlobal() + pontuacao);
+            } else {
+                perfil.get().setPontuacaoGlobal(pontuacao);
+            }
             perfil.get().setUltimaAtualizacao(LocalDateTime.now());
+            System.err.println("nivel: " + calcularNivel(perfil.get().getPontuacaoGlobal()));
+            perfil.get().setNivel(calcularNivel(pontuacao));
             repositorio.save(perfil.get());
         }
 
+        return perfil.orElseThrow(() -> new RuntimeException("Perfil do aluno não encontrado"));
+
     }
 
-    private int calcularNivel(double pontuacao) {
-        return (int) Math.min(100, Math.floor(pontuacao / 10)); // Exemplo: 1000 pts = nível 100
+    private int calcularNivel(int pontuacao) {
+        return pontuacao / 10 > 0 ? (pontuacao / 10) : 1;
     }
 }
