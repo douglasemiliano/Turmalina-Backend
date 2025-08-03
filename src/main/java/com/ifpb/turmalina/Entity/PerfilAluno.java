@@ -19,6 +19,7 @@ public class PerfilAluno {
     private String alunoId;
     private String nome;
     private int pontuacaoGlobal;
+    private int atividadesConcluidas; // Número de atividades concluídas
     private int nivel; // 1 a 100
     private List<Badge> badges;
     private LocalDateTime ultimaAtualizacao;
@@ -29,6 +30,7 @@ public class PerfilAluno {
         this.alunoId = alunoId;
         this.nome = "";
         this.pontuacaoGlobal = 0;
+        this.atividadesConcluidas = 0;
         this.nivel = 1; // Nível inicial
         this.badges = new ArrayList<Badge>();// Lista vazia de badges
         this.ultimaAtualizacao = LocalDateTime.now(); // Data e hora atual
@@ -95,6 +97,14 @@ public class PerfilAluno {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAtividadesConcluidas() {
+        return atividadesConcluidas;
+    }
+
+    public void setAtividadesConcluidas(int atividadesConcluidas) {
+        this.atividadesConcluidas = atividadesConcluidas;
     }
 
     public String toString() {

@@ -46,14 +46,14 @@ public class PerfilAlunoService {
 
         System.err.println("Atualizando pontuação global do aluno: " + alunoId + " com pontuação: " + pontuacao);
         if(perfil.isPresent()) {
-            if(perfil.get().getPontuacaoGlobal() < pontuacao) {
-                perfil.get().setPontuacaoGlobal(perfil.get().getPontuacaoGlobal() + pontuacao);
+            if(perfil.get().getAtividadesConcluidas() < pontuacao) {
+                perfil.get().setAtividadesConcluidas(perfil.get().getAtividadesConcluidas() + pontuacao);
             } else {
-                perfil.get().setPontuacaoGlobal(pontuacao);
+                perfil.get().setAtividadesConcluidas(pontuacao);
             }
             perfil.get().setUltimaAtualizacao(LocalDateTime.now());
-            System.err.println("nivel: " + calcularNivel(perfil.get().getPontuacaoGlobal()));
-            perfil.get().setNivel(calcularNivel(pontuacao));
+            System.err.println("nivel: " + calcularNivel(perfil.get().getAtividadesConcluidas()));
+            perfil.get().setNivel(calcularNivel(pontuacao + perfil.get().getPontuacaoGlobal()));
             repositorio.save(perfil.get());
         }
 

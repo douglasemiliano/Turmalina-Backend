@@ -44,7 +44,7 @@ public class DesafioService {
     public List<Desafio> getDesafioByCursoId(String idCurso) {
         List<Desafio> desafios = desafioRepository.findByCursoId(idCurso);
         if (desafios.isEmpty()) {
-            throw new RuntimeException("Nenhum desafio encontrado para o curso com ID: " + idCurso);
+            return null;
         }
         return desafios;
     }

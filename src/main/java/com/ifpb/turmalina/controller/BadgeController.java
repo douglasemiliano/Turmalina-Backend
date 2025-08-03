@@ -23,6 +23,11 @@ public class BadgeController {
         return ResponseEntity.ok(this.service.criarBadge(badge));
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<Badge>> getAllBadges() {
+        return ResponseEntity.ok(this.service.getAllBadges());
+    }
+
     @GetMapping("/user/{idUser}")
     public ResponseEntity<List<Badge>> getBadgesByUserId(@PathVariable String idUser) throws GeneralSecurityException, IOException {
         return ResponseEntity.ok(this.service.getBadgesByUserId(idUser));

@@ -1,37 +1,41 @@
 package com.ifpb.turmalina.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.time.LocalDateTime;
 
-@Document(collection = "Desafios")
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Document(collection = "desafios")
 @Getter
 @Setter
+@AllArgsConstructor
+@Data
 public class Desafio {
+    @Id
     private String id;
+    private String cursoId;
+    private String createdBy;
     private String titulo;
     private String descricao;
-    private int pontos;
-    private String cursoId;
+    private List<Premio> premio;
     private boolean ativo;
-    private Badge badge;
-    private String createdBy;
     private LocalDateTime dataFinal;
+    private List<WinCondition> winCondition;
 
     public Desafio() {
     }
 
-    public Desafio(String id, String titulo, String descricao, int pontos, String cursoId, boolean ativo, Badge badge, String createdBy, LocalDateTime dataFinal) {
-        this.id = id;
+    public Desafio(String cursoId, String createdBy, String titulo, String descricao, List<Premio> premio, boolean ativo, LocalDateTime dataFinal, List<WinCondition> winCondition) {
+        this.cursoId = cursoId;
+        this.createdBy = createdBy;
         this.titulo = titulo;
         this.descricao = descricao;
-        this.pontos = pontos;
-        this.cursoId = cursoId;
+        this.premio = premio;
         this.ativo = ativo;
-        this.badge = badge;
-        this.createdBy = createdBy;
         this.dataFinal = dataFinal;
+        this.winCondition = winCondition;
     }
 
     public String getId() {
@@ -58,14 +62,6 @@ public class Desafio {
         this.descricao = descricao;
     }
 
-    public int getPontos() {
-        return pontos;
-    }
-
-    public void setPontos(int pontos) {
-        this.pontos = pontos;
-    }
-
     public String getCursoId() {
         return cursoId;
     }
@@ -82,14 +78,6 @@ public class Desafio {
         this.ativo = ativo;
     }
 
-    public Badge getBadge() {
-        return badge;
-    }
-
-    public void setBadge(Badge badge) {
-        this.badge = badge;
-    }
-
     public String getCreatedBy() {
         return createdBy;
     }
@@ -104,5 +92,21 @@ public class Desafio {
 
     public void setDataFinal(LocalDateTime dataFinal) {
         this.dataFinal = dataFinal;
+    }
+
+    public List<Premio> getPremio() {
+        return premio;
+    }
+
+    public void setPremio(List<Premio> premio) {
+        this.premio = premio;
+    }
+
+    public List<WinCondition> getWinCondition() {
+        return winCondition;
+    }
+
+    public void setWinCondition(List<WinCondition> winCondition) {
+        this.winCondition = winCondition;
     }
 }

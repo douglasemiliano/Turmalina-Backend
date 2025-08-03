@@ -80,4 +80,8 @@ public class BadgeService {
         //codigoResgateRepository.deleteById(code); // Código só pode ser usado uma vez
         return buscarBadgePorId(redeemCode.getBadgeId());
     }
+
+    public List<Badge> getAllBadges() {
+        return this.badgeRepository.findAll();
+    }
 }

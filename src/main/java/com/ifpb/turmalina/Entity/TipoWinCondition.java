@@ -1,0 +1,13 @@
+package com.ifpb.turmalina.Entity;
+
+public enum TipoWinCondition {
+    ENTREGA_ATIVIDADES,
+    ENTREGA_ATIVIDADE_ID,
+    NOTA_MINIMA,
+    MEDIA_MINIMA,
+    ENTREGOU_TODAS,
+    ENTREGOU_ANTES_DO_PRAZO_X_VEZES,
+    PRIMEIRA_ATIVIDADE,
+    ENTREGOU_COM_NOTA_MAIOR_QUE_X
+}
+
