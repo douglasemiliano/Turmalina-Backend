@@ -55,14 +55,12 @@ public class DesafioAlunoService {
         for (Premio premio : desafio.getPremio()) {
             if (premio.getPontuacao() != null) {
                 perfil.setPontuacaoGlobal(perfil.getPontuacaoGlobal() + premio.getPontuacao());
+                perfilAlunoService.atualizarPerfilAluno(perfil);
             }
             if (premio.getBadgeId() != null) {
                 badgeService.addBadgeToUser(premio.getBadgeId(), alunoId);
             }
         }
-
-        perfilAlunoService.atualizarPerfilAluno(perfil);
-        System.err.println(perfil.getPontuacaoGlobal());
 
         return ResponseEntity.ok(new Response<>(HttpStatus.OK.toString(), "Prêmio resgatado com sucesso.", desafio.getPremio()));
     }

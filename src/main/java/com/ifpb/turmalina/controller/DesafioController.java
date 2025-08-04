@@ -27,6 +27,7 @@ public class DesafioController {
     @Autowired
     private DesafioService desafioService;
 
+
     @PostMapping("")
     public ResponseEntity<Desafio> criarDesafio(@RequestBody Desafio desafio) throws GeneralSecurityException, IOException {
         System.err.println(desafio.getPremio());

@@ -91,10 +91,12 @@ public class GamificationClass {
             }
 
             List<Desafio> desafiosCurso = desafioService.getDesafioByCursoId(curso.getId());
+            System.err.println("cursoId: " + curso.getId());
 
             if (desafiosCurso != null) {
                 for (Desafio desafio : desafiosCurso) {
                     DesafioAluno desafioAluno = desafioAlunoService.buscarPorAlunoEdesafio(perfil.getAlunoId(), desafio.getId());
+                    System.err.println(desafioAluno);
                     if (desafioAluno == null) {
                         // Vínculo inicial do desafio ao aluno
                         desafioAluno = new DesafioAluno();
